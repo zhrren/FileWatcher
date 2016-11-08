@@ -9,7 +9,7 @@ namespace Mark.FileWatcher
     {
         private static Dictionary<string, List<Action<FileSystemEventArgs>>> _watcher = new Dictionary<string, List<Action<FileSystemEventArgs>>>();
 
-        public static void Watch(string fullpath, Action<FileSystemEventArgs> action)
+        public static void Watch(string fullpath, Action<FileSystemEventArgs> action, bool immediate = false)
         {
             fullpath = Path.GetFullPath(fullpath);
             if (!_watcher.ContainsKey(fullpath))
@@ -23,6 +23,11 @@ namespace Mark.FileWatcher
             {
                 _watcher[fullpath].Add(action);
             }
+
+            if (immediate)
+                action(new FileSystemEventArgs(WatcherChangeTypes.Changed,
+                Path.GetDirectoryName(fullpath),
+                Path.GetFileName(fullpath)));
         }
 
         private static void Watcher_Changed(object sender, FileSystemEventArgs e)
