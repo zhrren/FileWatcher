@@ -36,7 +36,7 @@ namespace Mark.FileWatcher
                     Path.GetFileName(fullpath)));
         }
 
-        private static void Watcher_Changed(object sender, FileSystemEventArgs e)
+        private static void Watcher_Changed(FileSystemEventArgs e)
         {
             var watcher = _watcher.Keys.FirstOrDefault(x => x.Fullpath == e.FullPath);
             if (watcher != null)

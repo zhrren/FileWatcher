@@ -14,15 +14,13 @@ namespace Mark.FileWatcher
         private FileSystemWatcher _watcher;
         private WatcherChangeTypes _changeType;
         private string _changeFullPath;
-        private event EventHandler<FileSystemEventArgs> _changed;
-        private bool _immediate;
+        private event Action<FileSystemEventArgs> _changed;
 
         public string Fullpath { get; private set; }
 
-        public FileWatcher(string fullpath, bool immediate = false)
+        public FileWatcher(string fullpath)
         {
             Fullpath = fullpath;
-            _immediate = immediate;
 
             _watcher = new FileSystemWatcher();
             _watcher.Filter = Path.GetFileName(fullpath);
@@ -54,7 +52,7 @@ namespace Mark.FileWatcher
         {
             if (_changed != null) {
                 var args = new FileSystemEventArgs(_changeType, Path.GetDirectoryName(_changeFullPath), Path.GetFileName(_changeFullPath));
-                _changed(this, args);
+                Changed(args);
             }
         }
 
@@ -68,23 +66,17 @@ namespace Mark.FileWatcher
             _timer.Dispose();
         }
 
-        public event EventHandler<FileSystemEventArgs> Changed
+        public void AddChangedListener(Action<FileSystemEventArgs> callback, bool immediate=false)
         {
-            add
+            Changed += callback;
+            if (immediate)
             {
-                _changed += value;
-
-                if (_immediate)
-                {
-                    _changeType = WatcherChangeTypes.All;
-                    var args = new FileSystemEventArgs(_changeType, Path.GetDirectoryName(_changeFullPath), Path.GetFileName(_changeFullPath));
-                    _changed(this, args);
-                }
-            }
-            remove
-            {
-                _changed -= value;
+                _changeType = WatcherChangeTypes.All;
+                var args = new FileSystemEventArgs(_changeType, Path.GetDirectoryName(_changeFullPath), Path.GetFileName(_changeFullPath));
+                callback(args);
             }
         }
+
+        public event Action<FileSystemEventArgs> Changed;
     }
 }
