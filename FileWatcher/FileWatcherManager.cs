@@ -26,8 +26,8 @@ namespace Mark.FileWatcher
 
             if (immediate)
                 action(new FileSystemEventArgs(WatcherChangeTypes.Changed,
-                Path.GetDirectoryName(fullpath),
-                Path.GetFileName(fullpath)));
+                    Path.GetDirectoryName(fullpath),
+                    Path.GetFileName(fullpath)));
         }
 
         private static void Watcher_Changed(object sender, FileSystemEventArgs e)
