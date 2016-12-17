@@ -21,6 +21,7 @@ namespace Mark.FileWatcher
         public FileWatcher(string fullpath)
         {
             Fullpath = fullpath;
+            _changeFullPath = fullpath;
 
             _watcher = new FileSystemWatcher();
             _watcher.Filter = Path.GetFileName(fullpath);

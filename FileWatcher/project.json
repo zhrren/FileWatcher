@@ -1,6 +1,6 @@
 ﻿{
   "name": "Mark.FileWatcher",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "frameworks": {
     "net46": {
       "dependencies": {
