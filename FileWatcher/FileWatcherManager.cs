@@ -42,7 +42,7 @@ namespace Mark.FileWatcher
             if (watcher != null)
             {
                 var actions = _watcher[watcher];
-                actions.ForEach(x =>
+                actions.ToList().ForEach(x =>
                 {
                     x(e);
                 });
@@ -51,7 +51,7 @@ namespace Mark.FileWatcher
 
         public static void Dispose()
         {
-            foreach(var watcherEntry in _watcher)
+            foreach(var watcherEntry in _watcher.ToList())
             {
                 watcherEntry.Key.Changed -= Watcher_Changed;
                 watcherEntry.Key.Dispose();
